@@ -1,5 +1,130 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 
-using namespace std ;
+using namespace std; 
 
+const double G  = 9.81   ;
+const double PI = 3.1415 ;
+
+class Material {
+	public :
+		string name ; 
+		double yield_strength ; 
+		double density        ;
+
+		Material(string n , double ys, double d) {   // constructor for the variable , from here on we use " ys " and " d " as parameters ! 
+			name           = n  ;
+			yield_strength = ys ; 
+			density        = d  ;
+		}
+
+};
+
+
+int main() {
+
+	double mp, alpha, b, h, r, L, A; // the payload mass , angular acceleration , base , height , radius , length and area
+
+	char choice; // for choosing the area section , this might have a more efficent way ?!
+
+	cout << " HOWDY THERE ENGINEER !! ";
+
+	cout << "\n 1 - Which cross section are we using ? \n choose your link type : \n For circle type 'C' \n For rectangle type 'R' \n"; // getting the area 
+	cin >> choice;
+
+
+	if (choice != 'R' && choice != 'C') {
+		cout << "INVALID INPUT";
+		return 1;
+	}
+
+	if (choice == 'C') {
+		cout << "\nYou have chosen a Circle ! Kindly enter the initial radius : \n";
+		cin >> r;
+		A = r * r * PI;
+	}
+	else if (choice == 'R') {
+		cout << "\nYou have chosen a Rectangle ! Kindly enter the initial base:\n";
+		cin >> b;
+		cout << "\n and initial height :\n";
+		cin >> h;
+		A = b * h;
+
+	}
+
+
+	cout << "\n 2 - What is the initial length of the link ? \n";                  //getting the length 
+	cin >> L;
+
+	cout << "\n 3 - Enter payload mass     : \n ";                              //getting the payload mass 
+	cin >> mp;
+
+	cout << "\n 4 - Enter max angular acceleration : \n ";                   //getting the angular acceleration
+	cin >> alpha;
+
+
+	vector<Material> materials = {         //initialize materials database 
+
+		// i need to find a way to add classes to the vector here , otherwise i may just use an array
+
+	   Material("Cast iron", 130, 7.3),                              
+	   Material("Copper nickel", 130, 8.94),
+	   Material("Brass", 200, 8.73),                                               
+	   Material("Aluminum", 241, 2.7),
+	   Material("Steel", 247, 7.58),
+	   Material("Acrylic", 72, 1.16),
+	   Material("Copper", 70, 8.92),
+	   Material("Stainless steel", 275, 7.86),
+	   Material("Tungsten", 941, 19.25)
+	};
+
+	cout << "\n 5 - Choose one of the available materials : (1 - " << materials.size() << ")\n";
+
+	for (int i = 0; i < materials.size(); ++i) {                      // here i am showcasing all the materials i have
+		cout << i + 1 << " -> " << materials[i].name << "\n";       // here i is equal 0 , it will cout 1 and showcase 1st element in vector materials which is [0] !
+	}
+
+	int chosen_material;                        // here we specify the selected material and showcase the parameters
+	cout << "\nEnter your choice :\n" ;
+	cin >> chosen_material ;
+	if (chosen_material < 0 || chosen_material > materials.size()) {
+		cout << "INVALID INPUT !! ";
+		return 1; 
+	}
+
+	cout << "\nYou chose : " << materials[chosen_material].name << "\n with yield stregnth :" 
+		<< materials[chosen_material].yield_strength << "\nAnd density :" 
+		<< materials[chosen_material].density ;
+
+
+
+	// Calculations + loops 
+
+	double ml, M, I ;    //Link mass , Bending Moment , Moment of inertia , Maximum Stress
+
+	ml = A * L * materials[chosen_material].density; // calculated link mass remember that A = area of the cross section   
+
+	M = (ml * G * (L / 2)) + (mp * G * L) + (ml * ((L * L) / 4) * alpha + mp * L * L * alpha) ; // calculated bending moment 
+	
+	if (choice == 'C') {    // recall the "choice" varaiable to choose the area 
+		I = A * (r*r)/4 ;
+	}else{
+		I = A * (h * h) / 12 ;
+	}
+	for (double s_max; s_max < materials[chosen_material].yield_strength; A = A*(0.99*0.99) ) {  // the factor is 
+
+
+	}
+
+	
+
+
+
+
+
+
+
+
+
+}
